@@ -1,0 +1,47 @@
+# =========================
+#  Source control & helpers
+# =========================
+.git
+.gitignore
+
+# ========================
+#  Host build artefacts
+# ========================
+/target/
+/build/
+/dist/
+/.nb-gradle/
+/mvnw*
+/README.md
+
+# ===================
+#  IDE & Editor Files
+# ===================
+/.idea/
+/*.iml
+/.vscode/
+/.project
+/.classpath
+/.settings/
+/nbproject/
+
+# =========================
+#  Environment & Secrets
+# =========================
+.env*
+/token.txt
+docker-compose.override.yml
+
+# =================
+#  System & Temp
+# =================
+*.log
+*.tmp
+*.swp
+*.bak
+
+# ===========================
+#  Docker itself & specifics
+# ===========================
+Dockerfile*
+docker-compose.yml
