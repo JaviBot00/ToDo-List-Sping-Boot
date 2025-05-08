@@ -1,12 +1,14 @@
-# **📝 ToDo List con Spring Boot**
+# **🚀 Proyecto ToDo List API**
 
-> API REST de gestión de tareas con autenticación JWT, roles de usuario, validaciones y despliegue en Docker.
+> API REST desarrollada con Spring Boot para gestión de tareas,
+>implementando autenticación JWT, roles de usuario y despliegue con Docker.
+> Enfocada en prácticas de desarrollo robustas y arquitectura limpia.
 
 ---
 
 ## 📋 Índice
 
-1. [Descripción del proyecto](#-descripción-del-proyecto)
+1. [Características principales](#-características-principales)
 2. [Estructura del proyecto](#-estructura-del-proyecto)
 3. [Tecnologías y dependencias](#-tecnologías-y-dependencias)
 4. [Explicación de paquetes y clases](#-explicación-de-paquetes-y-clases)
@@ -18,21 +20,20 @@
 10. [Perfiles de configuración: dev y prod](#-perfiles-de-configuración-dev-y-prod)
 11. [Despliegue con Docker](#-despliegue-con-docker)
 12. [Uso de Docker Compose](#-uso-de-docker-compose)
-13. [.gitignore](#-gitignore)
-14. [Cómo ejecutar](#-cómo-ejecutar)
-15. [Notas finales](#-notas-finales)
+13. [Cómo ejecutar](#-cómo-ejecutar)
 
 ---
 
-## 🎯 Descripción del proyecto
+## ⚡️ Características principales
 
 Pequeña aplicación "ToDo List" desarrollada con Spring Boot que permite:
 
-* Registro y login de usuarios con JWT.
-* Roles (`USER`, `ADMIN`) para proteger operaciones.
-* CRUD de tareas asociadas al usuario autenticado.
-* Validaciones y DTOs para modelado de datos.
-* Despliegue local mediante Docker y Docker Compose.
+* 🔐 Registro y login de usuarios con autenticación JWT
+* 👥 Sistema de roles para proteger operaciones (`USER`, `ADMIN`)
+* 🎯 Gestión completa de tareas asociadas al usuario autenticado (CRUD)
+* 💡 Validaciones y DTOs para modelado de datos
+* 🧩 Separación de entornos (dev/prod)
+* 🐳 Despliegue local mediante Docker y Docker Compose
 
 ---
 
@@ -209,7 +210,7 @@ com.hotguy.tareas
 
 ---
 
-## 💾 Registro y roles de usuario
+## 👥 Registro y roles de usuario
 
 * **Registro**: rol por defecto `USER`; no expone rol ni password en respuestas.
 * **Promoción a ADMIN**: solo con endpoint protegido `/api/admin/{id}/promote` mediante `@PreAuthorize("hasRole('ADMIN')")`.
@@ -217,7 +218,7 @@ com.hotguy.tareas
 
 ---
 
-## 🧭 Gestión de tareas
+## 🎯 Gestión de tareas
 
 * Relación `Usuario` → `Tarea` bidireccional.
 * Se almacenan `fechaCreacion` y `fechaActualizacion` con `@CreationTimestamp` y `@UpdateTimestamp`.
@@ -280,13 +281,13 @@ spring.sql.init.mode=always
 
 ### ⚙️ Activar perfil
 
-- En desarrollo:
+- El perfil de desarrollador en application.properties:
 
-   ```bash
-   ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+   ```properties
+   spring.profiles.active=dev
    ```
 
-- En producción con Docker:
+- El perfil de producción con Docker:
 
 El perfil prod se activa desde el docker-compose.yml:
 
@@ -294,6 +295,19 @@ El perfil prod se activa desde el docker-compose.yml:
 environment:
 - SPRING_PROFILES_ACTIVE=prod
 ```
+
+---
+
+### ✅ ¿Qué se gana con esto?
+
+| Entorno | Base de Datos | Uso Principal       | Persistencia | Consola Web |
+|---------|---------------|---------------------|--------------|-------------|
+| dev     | H2 (memoria)  | Desarrollo local    | ❌            | ✅           |
+| prod    | MySQL         | Producción y Docker | ✅            | ❌           |
+
+Esta separación permite desarrollar de forma ágil y desplegar con robustez y persistencia de datos reales.
+
+---
 
 ## 🐳 Despliegue con Docker
 
@@ -316,16 +330,6 @@ MYSQL_USER=user
 MYSQL_PASSWORD=pass
 ```
 
-**.dockerignore** (opcional):
-
-```gitignore
-target/
-.git
-.idea
-*.iml
-*.log
-```
-
 ---
 
 ## 🐳 Uso de Docker Compose
@@ -335,6 +339,7 @@ version: '3.8'
 services:
   db:
     image: mysql:8
+    container_name: tareas-db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -348,49 +353,24 @@ services:
 
   app:
     build: .
+    container_name: tareas-app
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
       SPRING_PROFILES_ACTIVE: prod
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
     restart: always
 
 volumes:
   db_data:
 ```
-
----
-
-## 📌 .gitignore
-
-```gitignore
-/target/
-.mvn/
-.vscode/
-.idea/
-*.iml
-*.log
-.DS_Store
-.env
-
-# Docker
-docker-compose.override.yml
-```
----
-
-## ✅ ¿Qué se gana con esto?
-
-| Entorno | Base de Datos | Uso Principal       | Persistencia | Consola Web |
-|---------|---------------|---------------------|--------------|-------------|
-| dev     | H2 (memoria)  | Desarrollo local    | ❌            | ✅           |
-| prod    | MySQL         | Producción y Docker | ✅            | ❌           |
-
-Esta separación permite desarrollar de forma ágil y desplegar con robustez y persistencia de datos reales.
 
 ---
 
@@ -413,10 +393,3 @@ Esta separación permite desarrollar de forma ágil y desplegar con robustez y p
    docker-compose up --build
    ```
 5. Accede a `http://localhost:8080` y prueba la API.
-
----
-
-## 💡 Notas finales
-
-* Este proyecto fue desarrollado como backend de práctica para gestión de tareas.
-* Se enfoca en autenticación robusta, buenas prácticas con DTOs, y separación clara de responsabilidades.

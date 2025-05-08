@@ -1,9 +1,12 @@
 # =========================
 #  Build / Dependency dirs
 # =========================
-/target/                         # Artefactos de compilación Maven
-/.mvn/                           # Wrapper de Maven
-!.mvn/wrapper/maven-wrapper.jar  # Mantener jar del wrapper
+# Artefactos de compilación Maven
+/target/
+# Wrapper de Maven
+/.mvn/
+# Mantener jar del wrapper
+!.mvn/wrapper/maven-wrapper.jar
 .mvn/wrapper/maven-wrapper.properties
 
 # ===================
@@ -73,4 +76,3 @@ Thumbs.db
 # ==============
 # (si no hay frontend, no hace falta; si lo hay...)
 /node_modules/
-
