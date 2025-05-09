@@ -31,7 +31,7 @@ Pequeña aplicación "ToDo List" desarrollada con Spring Boot que permite:
 * 🔐 Registro y login de usuarios con autenticación JWT
 * 👥 Sistema de roles para proteger operaciones (`USER`, `ADMIN`)
 * 🎯 Gestión completa de tareas asociadas al usuario autenticado (CRUD)
-* 💡 Validaciones y DTOs para modelado de datos
+* 💡 Validaciones y DTO para modelado de datos
 * 🧩 Separación de entornos (dev/prod)
 * 🐳 Despliegue local mediante Docker y Docker Compose
 
@@ -141,7 +141,7 @@ com.hotguy.tareas
 * **UsuarioService**: implementa `UserDetailsService`, gestiona registro, carga usuarios, cambio de rol.
 * **TareaService**: lógica de negocio de tareas, creación, listado, toggle, edición, eliminación.
 
-### aplicación principal
+### Aplicación principal
 
 * **TareasApplication.java**: punto de entrada con `@SpringBootApplication`.
 
@@ -175,8 +175,6 @@ com.hotguy.tareas
 | `@SpringBootApplication`        | Marca la clase principal de una app Spring Boot                                 |
 | `@Valid`                        | Activa validaciones en los DTOs enviados en el request                          |
 
-
-
 ---
 
 ## 🌐 Endpoints de la API
@@ -206,7 +204,7 @@ com.hotguy.tareas
 * Se utiliza `UsernamePasswordAuthenticationToken`, `AuthenticationManager`, y `JwtFilter` para interceptar peticiones y verificar tokens JWT. 
 * Usuarios acceden con credenciales y reciben un token, que se debe enviar como `Authorization: Bearer <token>`. 
 * Las contraseñas están cifradas con `BCryptPasswordEncoder`. 
-* Usuarios ADMIN pueden ver todos los usuarios y cambiar roles.
+* Los usuarios ADMIN pueden ver todos los usuarios y cambiar roles.
 
 ---
 
@@ -295,17 +293,6 @@ El perfil prod se activa desde el docker-compose.yml:
 environment:
 - SPRING_PROFILES_ACTIVE=prod
 ```
-
----
-
-### ✅ ¿Qué se gana con esto?
-
-| Entorno | Base de Datos | Uso Principal       | Persistencia | Consola Web |
-|---------|---------------|---------------------|--------------|-------------|
-| dev     | H2 (memoria)  | Desarrollo local    | ❌            | ✅           |
-| prod    | MySQL         | Producción y Docker | ✅            | ❌           |
-
-Esta separación permite desarrollar de forma ágil y desplegar con robustez y persistencia de datos reales.
 
 ---
 
