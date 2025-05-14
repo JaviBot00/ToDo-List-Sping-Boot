@@ -54,7 +54,7 @@ public class JwtUtil {
 
     // Extrae todos los claims (información) del token
     private Claims extraerClaims(String token) {
-        return Jwts.parserBuilder()
+        return Jwts.parser()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
