@@ -44,7 +44,7 @@ public class AuthController {
 
     // Endpoint para registrar nuevos usuarios
     @PostMapping(ApiPaths.AuthPaths.REGISTER)
-    public ResponseEntity<?> registrar(@RequestBody UsuarioRequest request) {
+    public ResponseEntity<?> registrarUsuario(@RequestBody UsuarioRequest request) {
         return usuarioService.registrarUsuario(request.getUsername(), request.getPassword())
                 .<ResponseEntity<?>>map(token -> ResponseEntity.ok(new AuthRequest(token)))
                 .orElseGet(() -> ResponseEntity.badRequest().body("El usuario ya existe"));

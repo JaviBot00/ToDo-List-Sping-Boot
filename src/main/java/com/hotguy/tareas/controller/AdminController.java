@@ -21,11 +21,11 @@ public class AdminController {
 
     @GetMapping(ApiPaths.AdminPaths.LISTAR_USUARIOS)
     public ResponseEntity<List<UsuarioRequest>> listarUsuarios() {
-        return ResponseEntity.ok(usuarioService.obtenerTodos());
+        return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
 
     @PatchMapping(ApiPaths.AdminPaths.PROMOCIONAR)
-    public ResponseEntity<?> hacerAdmin(@PathVariable Long id) {
+    public ResponseEntity<?> promocionarAAdmin(@PathVariable Long id) {
         Optional<Usuario> usuarioOpt = usuarioService.promocionarAAdmin(id);
         return usuarioOpt
                 .<ResponseEntity<?>>map(u -> ResponseEntity.ok("Usuario promocionado a ADMIN"))

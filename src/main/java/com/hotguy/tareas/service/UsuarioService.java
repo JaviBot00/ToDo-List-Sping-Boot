@@ -27,7 +27,7 @@ public class UsuarioService implements UserDetailsService {
         this.jwtUtil = jwtUtil;
     }
 
-    public List<UsuarioRequest> obtenerTodos() {
+    public List<UsuarioRequest> listarUsuarios() {
         return usuarioRepository.findAll().stream()
                 .map(UsuarioRequest::new)
                 .collect(Collectors.toList());
