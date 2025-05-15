@@ -3,7 +3,6 @@ package com.hotguy.tareas.controller;
 import com.hotguy.tareas.dto.AuthRequest;
 import com.hotguy.tareas.dto.UsuarioRequest;
 import com.hotguy.tareas.service.AuthenticationService;
-import com.hotguy.tareas.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

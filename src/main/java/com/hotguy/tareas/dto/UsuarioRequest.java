@@ -15,6 +15,7 @@ public class UsuarioRequest {
     public UsuarioRequest(Usuario u) {
         this.id = u.getId();
         this.username = u.getUsername();
+        this.password = "********";
         this.rol = u.getRol();
     }
 

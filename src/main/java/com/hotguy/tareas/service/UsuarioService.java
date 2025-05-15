@@ -1,13 +1,12 @@
 package com.hotguy.tareas.service;
 
 import com.hotguy.tareas.dto.UsuarioRequest;
+import com.hotguy.tareas.mapper.UsuarioMapper;
 import com.hotguy.tareas.model.Usuario;
 import com.hotguy.tareas.repository.UsuarioRepository;
-import com.hotguy.tareas.security.JwtUtil;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,41 +17,21 @@ import java.util.stream.Collectors;
 public class UsuarioService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
+    private final UsuarioMapper usuarioMapper;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
+        this.usuarioMapper = usuarioMapper;
     }
 
     public List<UsuarioRequest> listarUsuarios() {
         return usuarioRepository.findAll().stream()
-                .map(UsuarioRequest::new)
+                .map(usuarioMapper::toDto) // Usar el mapper
                 .collect(Collectors.toList());
     }
 
     public Optional<Usuario> buscarPorUsername(String username) {
         return usuarioRepository.findByUsername(username);
-    }
-
-    public Optional<String> registrarUsuario(String username, String password) {
-        if (usuarioRepository.findByUsername(username).isPresent()) {
-            return Optional.empty();
-        }
-
-        Usuario nuevo = new Usuario();
-        nuevo.setUsername(username);
-        nuevo.setPassword(passwordEncoder.encode(password));
-        nuevo.setRol("USER"); // 👈 Rol por defecto
-//        nuevo.setRol(rol.equalsIgnoreCase("ADMIN") ? "ADMIN" : "USER"); // validación mínima
-
-        usuarioRepository.save(nuevo);
-
-        // Generar JWT
-        String token = jwtUtil.generarToken(username);
-        return Optional.of(token);
     }
 
     public Optional<Usuario> promocionarAAdmin(Long id) {
