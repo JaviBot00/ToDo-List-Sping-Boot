@@ -3,19 +3,18 @@ package com.hotguy.tareas.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 
 @Component // Marca esta clase como un bean para inyección de dependencias
 public class JwtUtil {
 
     private final JwtProperties jwtProperties;
-    private final Key key;
+    private final SecretKey key;
 
     public JwtUtil(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
@@ -25,10 +24,10 @@ public class JwtUtil {
     // Genera un token JWT con el nombre de usuario como subject
     public String generarToken(String username) {
         return Jwts.builder()
-                .setSubject(username) // Quien es el dueño del token
-                .setIssuedAt(new Date()) // Fecha de emisión
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration())) // Fecha de expiración
-                .signWith(key, SignatureAlgorithm.HS256) // Algoritmo y clave secreta
+                .subject(username) // Quien es el dueño del token
+                .issuedAt(new Date()) // Fecha de emisión
+                .expiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration())) // Fecha de expiración
+                .signWith(key) // Algoritmo y clave secreta
                 .compact();
     }
 
@@ -55,9 +54,9 @@ public class JwtUtil {
     // Extrae todos los claims (información) del token
     private Claims extraerClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(key)
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }
