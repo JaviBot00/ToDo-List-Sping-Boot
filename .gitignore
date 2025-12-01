@@ -27,6 +27,7 @@
 /.vscode/
 
 # Spring Tools Suite
+/.apt_generated
 /.factorypath
 /.springBeans
 /.sts4-cache

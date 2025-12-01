@@ -1,5 +1,5 @@
-# Usa una imagen base con Java 17
-FROM eclipse-temurin:17-jdk-alpine
+# Usa una imagen base con Java 21
+FROM eclipse-temurin:21-jdk-alpine
 
 # Copia el archivo .jar compilado
 ARG JAR_FILE=target/*.jar
